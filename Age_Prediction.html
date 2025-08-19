@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Age Predictor</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #e8f0fe;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    .container {
+      background-color: white;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      width: 300px;
+    }
+
+    input[type="text"] {
+      width: 80%;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      margin-top: 10px;
+    }
+
+    button {
+      padding: 10px 20px;
+      border: none;
+      background-color: #28a745;
+      color: white;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 20px;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background-color: #218838;
+    }
+
+    #result {
+      margin-top: 20px;
+      color: #444;
+      white-space: pre-line;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Predict Age</h2>
+    <input type="text" id="nameInput" placeholder="Enter your name">
+    <button onclick="predictAge()">Predict Age</button>
+    <p id="result">Enter a name and click the button.</p>
+  </div>
+
+  <script>
+    function predictAge() {
+      const name = document.getElementById("nameInput").value.trim();
+
+      if (!name) {
+        document.getElementById("result").innerText = "Please enter a name.";
+        return;
+      }
+
+      // نضيف timestamp لكسر الكاش
+      const url = `https://api.agify.io/?name=${name}&t=${new Date().getTime()}`;
+
+      fetch(url)
+        .then(res => res.json())
+        .then(data => {
+          if (data.age) {
+            document.getElementById("result").innerText =
+              `Name: ${data.name}\nPredicted Age: ${data.age}`;
+          } else {
+            document.getElementById("result").innerText =
+              `Name: ${data.name}\nPredicted Age: Not found`;
+          }
+        })
+        .catch(() => {
+          document.getElementById("result").innerText = "Failed to fetch age.";
+        });
+    }
+  </script>
+</body>
+</html>
